@@ -590,6 +590,7 @@ function! preview#preview_quickfix(linenr)
 		return ""
 	endif
 	let entry = qflist[linenr - 1]
+    let saved_winid = win_getid()
 	unlet qflist
 	if entry.valid
 		if entry.bufnr > 0
@@ -597,6 +598,10 @@ function! preview#preview_quickfix(linenr)
 			let text = 'Preview: '.bufname(entry.bufnr)
 			let text.= ' ('.entry.lnum.')'
 			call preview#cmdmsg(text, 1)
+            if has('nvim')
+                call win_gotoid(saved_winid)
+            endif
+
 		else
 			exec "norm! \<esc>"
 		endif
